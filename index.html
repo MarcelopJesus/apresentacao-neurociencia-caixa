@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quando a Regra Muda — Neurociência da Mudança Organizacional</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --dark: #0B1A23;
+  --dark2: #112633;
+  --dark3: #1A3040;
+  --teal: #0D9488;
+  --teal-light: #14B8A6;
+  --teal-glow: #2DD4BF;
+  --coral: #F97066;
+  --coral-soft: #FEE2E2;
+  --gold: #F59E0B;
+  --gold-soft: #FEF3C7;
+  --white: #F8FAFC;
+  --gray: #94A3B8;
+  --gray-light: #CBD5E1;
+  --text: #E2E8F0;
+  --subtext: #94A3B8;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', 'Segoe UI', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+}
+
+body {
+  background: var(--dark);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ NAVIGATION ============ */
+.nav {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.nav-dot:hover { background: rgba(255,255,255,0.35); transform: scale(1.3); }
+.nav-dot.active {
+  background: var(--teal);
+  border-color: var(--teal-glow);
+  box-shadow: 0 0 10px rgba(13,148,136,0.5);
+  transform: scale(1.3);
+}
+.nav-dot .tooltip {
+  position: absolute;
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--dark2);
+  color: var(--text);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.nav-dot:hover .tooltip { opacity: 1; }
+
+/* ============ SLIDE BASE ============ */
+.slide {
+  min-height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.slide-inner {
+  max-width: 1100px;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.slide-inner.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============ SLIDE 1: COVER ============ */
+.slide-cover {
+  background: linear-gradient(135deg, var(--dark) 0%, #0A2028 50%, var(--dark2) 100%);
+  text-align: center;
+  flex-direction: column;
+}
+.slide-cover::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--teal), var(--teal-glow), var(--teal));
+}
+.slide-cover::after {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(13,148,136,0.06) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+.brain-icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+  display: block;
+  filter: drop-shadow(0 0 20px rgba(13,148,136,0.3));
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+@keyframes pulse-glow {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(13,148,136,0.3)); }
+  50% { filter: drop-shadow(0 0 35px rgba(13,148,136,0.5)); }
+}
+.cover-title {
+  font-family: var(--font-display);
+  font-size: 56px;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.15;
+  margin-bottom: 20px;
+  letter-spacing: -0.5px;
+}
+.cover-subtitle {
+  font-size: 20px;
+  color: var(--teal-light);
+  line-height: 1.6;
+  max-width: 650px;
+  margin: 0 auto 32px;
+  font-weight: 300;
+}
+.cover-divider {
+  width: 80px;
+  height: 2px;
+  background: var(--teal);
+  margin: 0 auto 28px;
+}
+.cover-meta {
+  font-size: 14px;
+  color: var(--gray);
+  line-height: 1.8;
+}
+.cover-meta strong { color: var(--gray-light); font-weight: 500; }
+.scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: var(--gray);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  animation: bounce-down 2s ease infinite;
+}
+@keyframes bounce-down {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ============ SECTION TAG ============ */
+.section-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+.tag-teal { background: rgba(13,148,136,0.15); color: var(--teal-glow); }
+.tag-coral { background: rgba(249,112,102,0.15); color: var(--coral); }
+.tag-gold { background: rgba(245,158,11,0.15); color: var(--gold); }
+
+/* ============ SLIDE TITLES ============ */
+.slide-title {
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+.slide-subtitle {
+  font-size: 16px;
+  color: var(--subtext);
+  margin-bottom: 40px;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+/* ============ LIGHT SLIDES ============ */
+.slide-light {
+  background: linear-gradient(180deg, #F0F4F8 0%, #E8EDF2 100%);
+}
+.slide-light .slide-title { color: #1E293B; }
+.slide-light .slide-subtitle { color: #475569; }
+
+/* ============ DARK SLIDES ============ */
+.slide-dark {
+  background: linear-gradient(135deg, var(--dark) 0%, var(--dark2) 100%);
+}
+
+/* ============ CARDS ============ */
+.cards { display: grid; gap: 24px; }
+.cards-3 { grid-template-columns: repeat(3, 1fr); }
+.cards-2 { grid-template-columns: repeat(2, 1fr); }
+.cards-4 { grid-template-columns: repeat(2, 1fr); }
+
+.card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 32px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+.card-light {
+  background: #FFFFFF;
+  border-color: rgba(0,0,0,0.06);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+.card-light:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+.card-accent {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.card-icon {
+  font-size: 36px;
+  margin-bottom: 16px;
+  display: block;
+}
+.card-number {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 16px;
+}
+.card-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+.card-desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--subtext);
+}
+.card-light .card-desc { color: #64748B; }
+
+/* ============ QUOTE BOX ============ */
+.quote-box {
+  margin-top: 36px;
+  padding: 20px 28px;
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 16px;
+  text-align: center;
+  line-height: 1.6;
+}
+.quote-teal {
+  background: rgba(13,148,136,0.1);
+  color: var(--teal-glow);
+  border-left: 3px solid var(--teal);
+}
+.quote-coral {
+  background: rgba(249,112,102,0.1);
+  color: var(--coral);
+  border-left: 3px solid var(--coral);
+}
+.quote-gold {
+  background: rgba(245,158,11,0.1);
+  color: var(--gold);
+  border-left: 3px solid var(--gold);
+}
+.quote-light-teal {
+  background: rgba(13,148,136,0.08);
+  color: #0D7D73;
+  border-left: 3px solid var(--teal);
+}
+
+/* ============ STORYTELLING SLIDE ============ */
+.story-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 48px 56px;
+  max-width: 850px;
+}
+.story-card p {
+  font-size: 17px;
+  line-height: 1.9;
+  color: var(--gray-light);
+  margin-bottom: 16px;
+}
+.story-card .highlight {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--coral);
+  font-style: italic;
+  font-weight: 700;
+  display: block;
+  margin: 24px 0;
+}
+.story-card .conclusion {
+  font-weight: 600;
+  color: var(--white);
+}
+
+/* ============ BEFORE/AFTER ============ */
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.compare-card { border-radius: 12px; padding: 32px; }
+.compare-before {
+  background: #FFF;
+  border: 1px solid rgba(249,112,102,0.2);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+}
+.compare-after {
+  background: #FFF;
+  border: 1px solid rgba(13,148,136,0.2);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+}
+.compare-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+.label-before { background: var(--coral-soft); color: var(--coral); }
+.label-after { background: rgba(13,148,136,0.1); color: var(--teal); }
+.compare-list {
+  list-style: none;
+  padding: 0;
+}
+.compare-list li {
+  font-size: 15px;
+  padding: 8px 0;
+  color: #475569;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.compare-list li:last-child { border-bottom: none; }
+.compare-list li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.compare-before .compare-list li::before { background: var(--coral); }
+.compare-after .compare-list li::before { background: var(--teal); }
+
+/* ============ FLOW STEPS ============ */
+.flow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.flow-step {
+  flex: 1;
+  text-align: center;
+}
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  padding-top: 32px;
+  font-size: 24px;
+  color: var(--teal);
+  opacity: 0.6;
+}
+.flow-number {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  margin: 0 auto 14px;
+}
+.flow-title {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 6px;
+  color: var(--white);
+}
+.flow-desc {
+  font-size: 13px;
+  color: var(--subtext);
+  line-height: 1.5;
+}
+
+/* ============ BIO/PSICO/SOCIAL ============ */
+.dim-header {
+  padding: 16px 20px;
+  border-radius: 8px 8px 0 0;
+  text-align: center;
+}
+.dim-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 800;
+}
+.dim-sub {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 2px;
+}
+.dim-items {
+  padding: 24px 20px;
+}
+.dim-items p {
+  font-size: 14px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.dim-items p:last-child { border-bottom: none; }
+
+/* ============ DYNAMIC ============ */
+.dyn-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 24px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  transition: transform 0.3s ease;
+}
+.dyn-step:hover { transform: translateX(8px); }
+.dyn-number {
+  width: 48px; height: 48px; min-width: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+}
+.dyn-title {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.dyn-desc {
+  font-size: 14px;
+  color: var(--subtext);
+  line-height: 1.6;
+}
+
+/* ============ CLOSING ============ */
+.close-text {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1.6;
+  color: var(--gray-light);
+  text-align: center;
+  max-width: 750px;
+  margin: 0 auto;
+}
+.close-text .em-teal { color: var(--teal-glow); font-weight: 700; }
+.close-text .em-coral { color: var(--coral); font-weight: 700; }
+.close-divider {
+  width: 80px; height: 2px;
+  background: var(--teal);
+  margin: 36px auto;
+}
+.close-pair {
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+.close-pair span { display: block; }
+.light-line { color: var(--gray-light); font-weight: 400; }
+
+/* ============ BOTTOM BAR ============ */
+.bottom-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: rgba(255,255,255,0.05);
+  z-index: 100;
+}
+.bottom-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--teal-glow));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* ============ SLIDE COUNTER ============ */
+.slide-counter {
+  position: fixed;
+  bottom: 20px;
+  left: 32px;
+  font-size: 12px;
+  color: var(--gray);
+  letter-spacing: 1px;
+  z-index: 100;
+  font-weight: 300;
+}
+.slide-counter strong {
+  color: var(--teal-light);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* ============ KEYBOARD HINT ============ */
+.key-hint {
+  position: fixed;
+  bottom: 20px;
+  right: 60px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+  z-index: 100;
+  letter-spacing: 0.5px;
+}
+.key-hint kbd {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-family: var(--font-body);
+  font-size: 10px;
+}
+
+/* ============ STAGGER ANIMATIONS ============ */
+.stagger-1 { transition-delay: 0.1s; }
+.stagger-2 { transition-delay: 0.2s; }
+.stagger-3 { transition-delay: 0.3s; }
+.stagger-4 { transition-delay: 0.4s; }
+
+.card, .dyn-step, .compare-card, .flow-step {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
+}
+.visible .card, .visible .dyn-step, .visible .compare-card, .visible .flow-step {
+  opacity: 1;
+  transform: translateY(0);
+}
+.visible .stagger-1 { transition-delay: 0.15s; }
+.visible .stagger-2 { transition-delay: 0.3s; }
+.visible .stagger-3 { transition-delay: 0.45s; }
+.visible .stagger-4 { transition-delay: 0.6s; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 900px) {
+  .slide { padding: 40px 28px; }
+  .cover-title { font-size: 36px; }
+  .slide-title { font-size: 30px; }
+  .cards-3, .cards-4 { grid-template-columns: 1fr; }
+  .cards-2 { grid-template-columns: 1fr; }
+  .compare-grid { grid-template-columns: 1fr; }
+  .flow { flex-direction: column; align-items: center; }
+  .flow-arrow { transform: rotate(90deg); padding: 0; }
+  .story-card { padding: 28px 24px; }
+  .nav { right: 12px; gap: 8px; }
+  .nav-dot .tooltip { display: none; }
+  .key-hint { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION DOTS -->
+<nav class="nav" id="nav"></nav>
+
+<!-- PROGRESS BAR -->
+<div class="bottom-bar"><div class="bottom-bar-fill" id="progress"></div></div>
+
+<!-- SLIDE COUNTER -->
+<div class="slide-counter"><strong id="counter-current">01</strong> / <span id="counter-total">12</span></div>
+
+<!-- KEYBOARD HINT -->
+<div class="key-hint"><kbd>↑</kbd> <kbd>↓</kbd> ou scroll para navegar</div>
+
+<!-- ======================================== -->
+<!-- SLIDE 1: CAPA -->
+<!-- ======================================== -->
+<section class="slide slide-cover" data-name="Início">
+  <div class="slide-inner">
+    <span class="brain-icon">🧠</span>
+    <h1 class="cover-title">Quando a Regra Muda</h1>
+    <p class="cover-subtitle">O Cérebro Humano Diante da Ansiedade<br>e da Competitividade nas Mudanças Organizacionais</p>
+    <div class="cover-divider"></div>
+    <p class="cover-meta">
+      Apresentação para Liderança e Time Comercial<br>
+      <strong>Márcia Real</strong> · Caixa Econômica Federal
+    </p>
+  </div>
+  <div class="scroll-hint">↓ scroll</div>
+</section>
+
+<!-- ======================================== -->
+<!-- SLIDE 2: STORYTELLING -->
+<!-- ======================================== -->
+<section class="slide slide-dark" data-name="Reflexão">
+  <div class="slide-inner">
+    <span class="section-tag tag-teal">Reflexão</span>
+    <h2 class="slide-title">Imagine uma corrida...</h2>
+    <div class="story-card">
+      <p>Desde o início, todos sabem a regra: quem chegar primeiro, vence.</p>
+      <p>As pessoas correm, se esforçam, calculam o ritmo, observam os outros corredores… tudo faz sentido porque existe uma referência clara: <strong style="color:var(--white)">a linha de chegada</strong>.</p>
+      <p>Agora imagine que, no meio da corrida, alguém diz:</p>
+      <span class="highlight">"A partir de agora, não existe mais primeiro lugar."</span>
+      <p>Ninguém sai da pista. Mas algo muda imediatamente dentro de cada corredor. Alguns diminuem o ritmo. Outros olham para os lados. Alguns ficam inseguros… e outros competem ainda mais.</p>
+      <p class="conclusion">O cérebro de cada pessoa precisa reorganizar a forma de entender esforço, reconhecimento e pertencimento.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================== -->
+<!-- SLIDE 3: O MOMENTO ATUAL -->
+<!-- ======================================== -->
+<section class="slide slide-light" data-name="Momento Atual">
+  <div class="slide-inner">
+    <span class="section-tag tag-coral">Nosso contexto</span>
+    <h2 class="slide-title" style="color:#1E293B">O Nosso Momento Atual</h2>
+    <p class="slide-subtitle" style="color:#475569">O que aconteceu quando o modelo de ranqueamento mudou</p>
+    <div class="compare-grid">
+      <div class="compare-card compare-before stagger-1">
+        <span class="compare-label label-before">ANTES</span>
+        <ul class="compare-list">
+          <li>Ranking claro de desempenho</li>
+          <li>Referência de quem era o 1º, o 2º...</li>
+          <li>Meta previsível e comparável</li>
+          <li>Reconhecimento por posição</li>
+          <li>Competição como motor</li>
+        </ul>
+      </div>
+      <div class="compare-card compare-after stagger-2">
+        <span class="compare-label label-after">AGORA</span>
+        <ul class="compare-list">
+          <li>Modelo de mensuração mudou</li>
+          <li>Sem referência clara de posição</li>
+          <li>Incerteza sobre desempenho</li>
+          <li>Ansiedade generalizada</li>
+          <li>Competição silenciosa ou paralisia</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-box quote-light-teal" style="margin-top:28px">
+      "Para o cérebro, incerteza é interpretada como ameaça."
+    </div>
+  </div>
+</section>
+
+<!-- ======================================== -->
+<!-- SLIDE 4: 3 PERGUNTAS DO CÉREBRO -->
+<!-- ======================================== -->
+<section class="slide slide-dark" data-name="3 Perguntas">
+  <div class="slide-inner">
+    <span class="section-tag tag-teal">Neurociência</span>
+    <h2 class="slide-title">As 3 Perguntas que o Cérebro<br>Faz o Tempo Todo</h2>
+    <p class="slide-subtitle">O cérebro humano busca constantemente respostas para manter a sensação de segurança</p>
+    <div class="cards cards-3">
+      <div class="card stagger-1">
+        <div class="card-accent" style="background:var(--teal)"></div>
+        <div class="card-number" style="background:var(--teal)">1</div>
+        <div class="card-title" style="color:var(--white)">Onde eu estou<br>no grupo?</div>
+        <p class="card-desc">Necessidade de localização social e comparação com os outros</p>
+      </div>
+      <div class="card stagger-2">
+        <div class="card-accent" style="background:var(--coral)"></div>
+        <div class="card-number" style="background:var(--coral)">2</div>
+        <div class="card-title" style="color:var(--white)">Qual é o meu<br>valor aqui?</div>
+        <p class="card-desc">Necessidade de reconhecimento e validação do grupo</p>
+      </div>
+      <div class="card stagger-3">
+        <div class="card-accent" style="background:var(--gold)"></div>
+        <div class="card-number" style="background:var(--gold)">3</div>
+        <div class="card-title" style="color:var(--white)">O que fazer para<br>continuar pertencendo?</div>
+        <p class="card-desc">Necessidade de pertencimento e segurança no grupo</p>
+      </div>
+    </div>
+    <div class="quote-box quote-teal">
+      "Quando o ranking desaparece, o cérebro perde a métrica de comparação<br>e ativa áreas ligadas à ansiedade e vigilância."
+    </div>
+  </div>
+</section>
+
+<!-- ======================================== -->
+<!-- SLIDE 5: LUTA / FUGA / PARALISAÇÃO -->
+<!-- ======================================== -->
+<section class="slide slide-dark" data-name="Luta · Fuga · Paralisia" style="background:linear-gradient(135deg, #0F1720 0%, #12202B 100%)">
+  <div class="slide-inner">
+    <span class="section-tag tag-coral">Sistema de Sobrevivência</span>
+    <h2 class="slide-title">O Sistema de Sobrevivência<br>do Cérebro</h2>
+    <p class="slide-subtitle">Quando o cérebro detecta incerteza, a amígdala dispara um dos 3 modos de proteção</p>
+    <div class="cards cards-3">
+      <div class="card stagger-1" style="border-color:rgba(249,112,102,0.15)">
+        <div class="card-accent" style="background:var(--coral)"></div>
+        <div class="card-icon">⚔️</div>
+        <div class="card-title" style="color:var(--coral); font-size:24px">LUTA</div>
+        <p class="card-desc">Competitividade exagerada<br>Agressividade nas metas<br>Conflitos com colegas<br>Necessidade de provar valor</p>
+      </div>
+      <div class="card stagger-2" style="border-color:rgba(245,158,11,0.15)">
+        <div class="card-accent" style="background:var(--gold)"></div>
+        <div class="card-icon">🏃</div>
+        <div class="card-title" style="color:var(--gold); font-size:24px">FUGA</div>
+        <p class="card-desc">Desengajamento<br>Evitar responsabilidades<br>Absenteísmo emocional<br>Busca por saída</p>
+      </div>
+      <div class="card stagger-3" style="border-color:rgba(148,163,184,0.15)">
+        <div class="card-accent" style="background:var(--gray)"></div>
+        <div class="card-icon">🔒</div>
+        <div class="card-title" style="color:var(--gray-light); font-size:24px">PARALISAÇÃO</div>
+        <p class="card-desc">Procrastinação<br>Indecisão constante<br>Medo de errar<br>Esperar sem agir</p>
+      </div>
+    </div>
+    <div class="quote-box quote-teal">
+      "Nenhuma dessas reações é fraqueza. É o cérebro fazendo o que ele evoluiu para fazer: <strong>proteger</strong>."
+    </div>
+  </div>
+</section>
+
+<!-- ======================================== -->
+<!-- SLIDE 6: PROCESSO NEUROBIOLÓGICO -->
+<!-- ======================================== -->
+<section class="slide slide-light" data-name="Processo Neural">
+  <div class="slide-inner">
+    <span class="section-tag tag-teal" style="background:rgba(13,148,136,0.1); color:var(--teal)">Caminho neurobiológico</span>
+    <h2 class="slide-title" style="color:#1E293B">O Que Acontece Dentro do Cérebro</h2>
+    <p class="slide-subtitle" style="color:#475569">O caminho neurobiológico da mudança à ansiedade</p>
+    <div class="flow">
+      <div class="flow-step stagger-1">
+        <div class="flow-number" style="background:var(--teal)">1</div>
+        <div class="flow-title" style="color:#1E293B">Mudança<br>Detectada</div>
+        <div class="flow-desc" style="color:#64748B">Regras novas entram em vigor</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step stagger-2">
+        <div class="flow-number" style="background:var(--gold)">2</div>
+        <div class="flow-title" style="color:#1E293B">Incerteza<br>Percebida</div>
+        <div class="flow-desc" style="color:#64748B">Cérebro não acha referência conhecida</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step stagger-3">
+        <div class="flow-number" style="background:var(--coral)">3</div>
+        <div class="flow-title" style="color:#1E293B">Amígdala<br>em Alerta</div>
+        <div class="flow-desc" style="color:#64748B">Sistema nervoso ativa proteção</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step stagger-4">
+        <div class="flow-number" style="background:#1E293B">4</div>
+        <div class="flow-title" style="color:#1E293B">Resposta<br>Automática</div>
+        <div class="flow-desc" style="color:#64748B">Luta, fuga ou paralisação</div>
+      </div>
+    </div>
+    <div class="quote-box quote-light-teal">
+      "Mesmo quando a mudança é positiva, o cérebro primeiro reage com proteção.<br>Pertencer ao grupo sempre foi uma questão de sobrevivência humana."
+    </div>
+  </div>
+</section>
+
+<!-- ======================================== -->
+<!-- SLIDE 7: COMPETITIVIDADE É BIOLÓGICA -->
+<!-- ======================================== -->
+<section class="slide slide-dark" data-name="Competitividade">
+  <div class="slide-inner">
+    <span class="section-tag tag-gold">Raízes evolutivas</span>
+    <h2 class="slide-title">A Competitividade Não É<br>Só Cultural</h2>
+    <p class="slide-subtitle">Ela tem raízes evolutivas profundas — e o ranking ativava esse sistema</p>
+    <div class="cards cards-2">
+      <div class="card stagger-1" style="border-color:rgba(13,148,136,0.15)">
+        <div class="card-accent" style="background:var(--teal)"></div>
+        <div class="card-icon">📊</div>
+        <div class="card-title" style="color:var(--teal-light)">O Ranking Ativava</div>
+        <p class="card-desc">
+          ✓ Clareza de meta<br>
+          ✓ Recompensa previsível (dopamina)<br>
+          ✓ Comparação direta<br>
+          ✓ Senso de posição social
+        </p>
+      </div>
+      <div class="card stagger-2" style="border-color:rgba(249,112,102,0.15)">
+        <div class="card-accent" style="background:var(--coral)"></div>
+        <div class="card-icon">⚠️</div>
+        <div class="card-title" style="color:var(--coral)">Sem Ranking</div>
+        <p class="card-desc">
+          ✗ Onde está o reconhecimento?<br>
+          ✗ Cérebro busca ameaças<br>
+          ✗ Dopamina sem direção<br>
+          ✗ Ansiedade por indefinição
+        </p>
+      </div>
+    </div>
+    <div class="quote-box quote-gold">
+      "Se o cérebro não entende onde está o reconhecimento, ele começa a procurar ameaças."
+    </div>
+  </div>
+</section>
+
+<!-- ======================================== -->
+<!-- SLIDE 8: SER BIOPSICOSSOCIAL -->
+<!-- ======================================== -->
+<section class="slide slide-light" data-name="Biopsicossocial">
+  <div class="slide-inner">
+    <span class="section-tag tag-teal" style="background:rgba(13,148,136,0.1); color:var(--teal)">Ser integral</span>
+    <h2 class="slide-title" style="color:#1E293B">Somos Seres Biopsicossociais</h2>
+    <p class="slide-subtitle" style="color:#475569">A mudança afeta todas as dimensões do ser humano — não apenas o profissional</p>
+    <div class="cards cards-3">
+      <div class="card card-light stagger-1" style="padding:0; overflow:hidden">
+        <div class="dim-header" style="background:var(--coral-soft); color:var(--coral)">
+          <div class="dim-title">BIO</div>
+          <div class="dim-sub">Corpo & Cérebro</div>
+        </div>
+        <div class="dim-items" style="color:#475569">
+          <p>Cortisol elevado</p>
+          <p>Tensão muscular</p>
+          <p>Insônia</p>
+          <p>Fadiga crônica</p>
+        </div>
+      </div>
+      <div class="card card-light stagger-2" style="padding:0; overflow:hidden">
+        <div class="dim-header" style="background:rgba(13,148,136,0.08); color:var(--teal)">
+          <div class="dim-title">PSICO</div>
+          <div class="dim-sub">Mente & Emoção</div>
+        </div>
+        <div class="dim-items" style="color:#475569">
+          <p>Ansiedade</p>
+          <p>Medo de não ser suficiente</p>
+          <p>Insegurança</p>
+          <p>Perda de motivação</p>
+        </div>
+      </div>
+      <div class="card card-light stagger-3" style="padding:0; overflow:hidden">
+        <div class="dim-header" style="background:var(--gold-soft); color:#B45309">
+          <div class="dim-title">SOCIAL</div>
+          <div class="dim-sub">Relações & Grupo</div>
+        </div>
+        <div class="dim-items" style="color:#475569">
+          <p>Desconfiança</p>
+          <p>Competição silenciosa</p>
+          <p>Isolamento</p>
+          <p>Perda de coesão</p>
+        </div>
+      </div>
+    </div>
+    <div class="quote-box quote-light-teal">
+      "Liderar esse momento exige olhar para a pessoa inteira — não apenas para o profissional."
+    </div>
+  </div>
+</section>
+
+<!-- ======================================== -->
+<!-- SLIDE 9: PAPEL DO LÍDER -->
+<!-- ======================================== -->
+<section class="slide slide-dark" data-name="Papel do Líder">
+  <div class="slide-inner">
+    <span class="section-tag tag-teal">Para líderes</span>
+    <h2 class="slide-title">O Papel do Líder<br>Nesse Momento</h2>
+    <p class="slide-subtitle">Quando o ranking sai, a liderança entra como referência emocional</p>
+    <div class="cards cards-3">
+      <div class="card stagger-1" style="border-color:rgba(13,148,136,0.15)">
+        <div class="card-accent" style="background:var(--teal-light)"></div>
+        <div class="card-icon">👁️</div>
+        <div class="card-title" style="color:var(--teal-light)">CLAREZA</div>
+        <p class="card-desc">Explique o porquê da mudança.<br>O cérebro se acalma quando entende o sentido.<br>Dê contexto, não apenas ordens.</p>
+      </div>
+      <div class="card stagger-2" style="border-color:rgba(249,112,102,0.15)">
+        <div class="card-accent" style="background:var(--coral)"></div>
+        <div class="card-icon">❤️</div>
+        <div class="card-title" style="color:var(--coral)">PERTENCIMENTO</div>
+        <p class="card-desc">As pessoas precisam saber:<br>"Ainda sou valorizado?"<br>"Ainda tenho lugar aqui?"<br>Reafirme isso ativamente.</p>
+      </div>
+      <div class="card stagger-3" style="border-color:rgba(245,158,11,0.15)">
+        <div class="card-accent" style="background:var(--gold)"></div>
+        <div class="card-icon">⭐</div>
+        <div class="card-title" style="color:var(--gold)">RECONHECIMENTO<br>DIFERENTE</div>
+        <p class="card-desc">Novas formas de validação:<br>Contribuição · Colaboração<br>Evolução · Impacto coletivo</p>
+      </div>
+    </div>
+    <div class="quote-box quote-teal">
+      "O líder passa a ser a nova referência de segurança do cérebro da equipe."
+    </div>
+  </div>
+</section>
+
+<!-- ======================================== -->
+<!-- SLIDE 10: FERRAMENTAS PRÁTICAS -->
+<!-- ======================================== -->
+<section class="slide slide-light" data-name="Ferramentas">
+  <div class="slide-inner">
+    <span class="section-tag tag-gold" style="background:rgba(245,158,11,0.1); color:#B45309">Ferramentas</span>
+    <h2 class="slide-title" style="color:#1E293B">Ferramentas Práticas<br>para o Dia a Dia</h2>
+    <p class="slide-subtitle" style="color:#475569">Ações concretas que ativam segurança no cérebro da equipe</p>
+    <div class="cards cards-4">
+      <div class="card card-light stagger-1" style="border-left:3px solid var(--teal)">
+        <div class="card-icon" style="font-size:28px">🤝</div>
+        <div class="card-title" style="color:var(--teal)">Check-in Emocional</div>
+        <p class="card-desc" style="color:#475569">Comece reuniões perguntando:<br>"Como vocês estão chegando hoje?"<br>Isso ativa pertencimento e reduz estado de alerta.</p>
+      </div>
+      <div class="card card-light stagger-2" style="border-left:3px solid var(--teal)">
+        <div class="card-icon" style="font-size:28px">📈</div>
+        <div class="card-title" style="color:var(--teal)">Feedback de Evolução</div>
+        <p class="card-desc" style="color:#475569">Substitua "você é o 3º" por:<br>"Você evoluiu em X neste mês."<br>Reconheça progresso, não posição.</p>
+      </div>
+      <div class="card card-light stagger-3" style="border-left:3px solid var(--teal)">
+        <div class="card-icon" style="font-size:28px">🛡️</div>
+        <div class="card-title" style="color:var(--teal)">Transparência Radical</div>
+        <p class="card-desc" style="color:#475569">Explique o contexto das mudanças.<br>O cérebro se acalma com informação.<br>Incerteza sem explicação = ameaça.</p>
+      </div>
+      <div class="card card-light stagger-4" style="border-left:3px solid var(--teal)">
+        <div class="card-icon" style="font-size:28px">🎉</div>
+        <div class="card-title" style="color:var(--teal)">Celebração Coletiva</div>
+        <p class="card-desc" style="color:#475569">Reconheça conquistas do time, não só individuais. Isso redireciona a competição para colaboração.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================== -->
+<!-- SLIDE 11: DINÂMICA PRÁTICA -->
+<!-- ======================================== -->
+<section class="slide slide-dark" data-name="Dinâmica" style="background:linear-gradient(135deg, #12200A 0%, #1A2A15 30%, var(--dark2) 100%)">
+  <div class="slide-inner">
+    <span class="section-tag tag-gold">Dinâmica em grupo</span>
+    <h2 class="slide-title">Exercício: O Cérebro na Mudança</h2>
+    <p class="slide-subtitle">2 minutos para sentir na prática o efeito da mudança no cérebro</p>
+    <div class="dyn-step stagger-1">
+      <div class="dyn-number" style="background:var(--gold)">1</div>
+      <div>
+        <div class="dyn-title">Cruzem os braços</div>
+        <div class="dyn-desc">Da forma natural, como sempre fazem. Observem qual braço ficou por cima.</div>
+      </div>
+    </div>
+    <div class="dyn-step stagger-2">
+      <div class="dyn-number" style="background:var(--gold)">2</div>
+      <div>
+        <div class="dyn-title">Agora invertam</div>
+        <div class="dyn-desc">Coloquem o outro braço por cima. Sintam a diferença. O desconforto.</div>
+      </div>
+    </div>
+    <div class="dyn-step stagger-3">
+      <div class="dyn-number" style="background:var(--teal)">3</div>
+      <div>
+        <div class="dyn-title">Reflexão</div>
+        <div class="dyn-desc">"Esse desconforto é o cérebro dizendo: isso não é o padrão conhecido. É exatamente o que todos estamos sentindo agora."</div>
+      </div>
+    </div>
+    <div class="quote-box quote-gold" style="margin-top:28px">
+      "Se mudar o braço já causa desconforto, imagine mudar todo o sistema de reconhecimento."
+    </div>
+  </div>
+</section>
+
+<!-- ======================================== -->
+<!-- SLIDE 12: ENCERRAMENTO -->
+<!-- ======================================== -->
+<section class="slide slide-dark" data-name="Encerramento" style="background:linear-gradient(180deg, var(--dark) 0%, #081218 100%)">
+  <div class="slide-inner" style="text-align:center">
+    <span class="brain-icon" style="font-size:56px; margin-bottom:32px">🧠</span>
+    <div class="close-text">
+      Mudanças organizacionais não acontecem<br>apenas na estrutura da empresa.
+    </div>
+    <div style="height:12px"></div>
+    <div class="close-text">
+      <span class="em-teal">Elas acontecem dentro do cérebro das pessoas.</span>
+    </div>
+    <div class="close-divider"></div>
+    <div class="close-pair">
+      <span class="light-line">Quando o cérebro se sente seguro,</span>
+      <span class="em-teal" style="color:var(--teal-glow); font-weight:700; font-family:var(--font-display)">a colaboração aparece.</span>
+    </div>
+    <div class="close-pair">
+      <span class="light-line">Quando o cérebro se sente ameaçado,</span>
+      <span class="em-coral" style="color:var(--coral); font-weight:700; font-family:var(--font-display)">a competição aumenta.</span>
+    </div>
+    <div style="margin-top:40px; font-size:14px; color:var(--gray)">
+      Liderar nesse momento não é apenas explicar processos.<br>
+      É ajudar o cérebro humano a encontrar novamente<br>
+      <strong style="color:var(--teal-light)">segurança, pertencimento e sentido</strong>.
+    </div>
+  </div>
+</section>
+
+<script>
+// ============ INTERSECTION OBSERVER ============
+const slides = document.querySelectorAll('.slide');
+const nav = document.getElementById('nav');
+const progress = document.getElementById('progress');
+const counterCurrent = document.getElementById('counter-current');
+const counterTotal = document.getElementById('counter-total');
+
+counterTotal.textContent = slides.length;
+
+// Build nav dots
+slides.forEach((slide, i) => {
+  const dot = document.createElement('div');
+  dot.className = 'nav-dot';
+  if (i === 0) dot.classList.add('active');
+  const tooltip = document.createElement('span');
+  tooltip.className = 'tooltip';
+  tooltip.textContent = slide.dataset.name || `Slide ${i + 1}`;
+  dot.appendChild(tooltip);
+  dot.addEventListener('click', () => {
+    slide.scrollIntoView({ behavior: 'smooth' });
+  });
+  nav.appendChild(dot);
+});
+
+const navDots = document.querySelectorAll('.nav-dot');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelector('.slide-inner').classList.add('visible');
+      const idx = Array.from(slides).indexOf(entry.target);
+      navDots.forEach(d => d.classList.remove('active'));
+      navDots[idx].classList.add('active');
+      counterCurrent.textContent = String(idx + 1).padStart(2, '0');
+      progress.style.width = ((idx + 1) / slides.length * 100) + '%';
+    }
+  });
+}, { threshold: 0.4 });
+
+slides.forEach(slide => observer.observe(slide));
+
+// ============ KEYBOARD NAVIGATION ============
+let currentSlide = 0;
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+    e.preventDefault();
+    currentSlide = Math.min(currentSlide + 1, slides.length - 1);
+    slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+  }
+  if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+    e.preventDefault();
+    currentSlide = Math.max(currentSlide - 1, 0);
+    slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+  }
+});
+
+// Update currentSlide on scroll
+const scrollObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      currentSlide = Array.from(slides).indexOf(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+slides.forEach(slide => scrollObserver.observe(slide));
+</script>
+</body>
+</html>
